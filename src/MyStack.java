@@ -1,14 +1,14 @@
 import java.util.NoSuchElementException;
 
-public class MyStack {
-    private Node top;
+public class MyStack<T> {
+    private Node<T> top;
     private int size;
 
-    private class Node {
-        Object value;
-        Node next;
+    private static class Node<T> {
+        T value;
+        Node<T> next;
 
-        Node(Object value, Node next) {
+        Node(T value, Node<T> next) {
             this.value = value;
             this.next = next;
         }
@@ -19,25 +19,21 @@ public class MyStack {
         size = 0;
     }
 
-    public void push(Object value) {
-        Node newNode = new Node(value, top);
+    public void push(T value) {
+        Node<T> newNode = new Node<>(value, top);
         top = newNode;
         size++;
     }
 
     public void remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
-
+        checkIndex(index);
         if (index == 0) {
             top = top.next;
         } else {
-            Node prevNode = getNode(index - 1);
-            Node currentNode = prevNode.next;
+            Node<T> prevNode = getNode(index - 1);
+            Node<T> currentNode = prevNode.next;
             prevNode.next = currentNode.next;
         }
-
         size--;
     }
 
@@ -50,18 +46,18 @@ public class MyStack {
         return size;
     }
 
-    public Object peek() {
+    public T peek() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
         return top.value;
     }
 
-    public Object pop() {
+    public T pop() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        Object value = top.value;
+        T value = top.value;
         top = top.next;
         size--;
         return value;
@@ -71,12 +67,20 @@ public class MyStack {
         return size == 0;
     }
 
-    private Node getNode(int index) {
-        Node currentNode = top;
+    private Node<T> getNode(int index) {
+        Node<T> current = top;
         for (int i = 0; i < index; i++) {
-            currentNode = currentNode.next;
+            current = current.next;
         }
-        return currentNode;
+        return current;
+    }
+
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
     }
 }
+
+
 

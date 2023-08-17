@@ -1,16 +1,19 @@
-public class MyHashMap {
-    private static final int INITIAL_CAPACITY = 64;
-    private Node[] table;
+import java.util.NoSuchElementException;
+
+public class MyHashMap<K, V> {
+    private static final int INITIAL_CAPACITY = 16;
+    private Node<K, V>[] table;
     private int size;
 
-    private class Node {
-        Object key;
-        Object value;
-        Node next;
+    private static class Node<K, V> {
+        K key;
+        V value;
+        Node<K, V> next;
 
-        Node(Object key, Object value) {
+        Node(K key, V value, Node<K, V> next) {
             this.key = key;
             this.value = value;
+            this.next = next;
         }
     }
 
@@ -19,37 +22,28 @@ public class MyHashMap {
         size = 0;
     }
 
-    private int hash(Object key) {
-        return Math.abs(key.hashCode()) % table.length;
-
-    }
-
-    public void put(Object key, Object value) {
+    public void put(K key, V value) {
         int index = hash(key);
-        Node newNode = new Node(key, value);
+        Node<K, V> newNode = new Node<>(key, value, null);
 
         if (table[index] == null) {
             table[index] = newNode;
         } else {
-            Node currentNode = table[index];
-            while (currentNode.next != null) {
-                if (currentNode.key.equals(key)) {
-                    currentNode.value = value;
+            Node<K, V> current = table[index];
+            while (current.next != null) {
+                if (current.key.equals(key)) {
+                    current.value = value;
                     return;
                 }
-                currentNode = currentNode.next;
+                current = current.next;
             }
-            if (currentNode.key.equals(key)) {
-                currentNode.value = value;
-            } else {
-                currentNode.next = newNode;
-            }
+            current.next = newNode;
         }
 
         size++;
     }
 
-    public void remove(Object key) {
+    public void remove(K key) {
         int index = hash(key);
 
         if (table[index] == null) {
@@ -62,23 +56,21 @@ public class MyHashMap {
             return;
         }
 
-        Node prevNode = table[index];
-        Node currentNode = prevNode.next;
-        while (currentNode != null) {
-            if (currentNode.key.equals(key)) {
-                prevNode.next = currentNode.next;
+        Node<K, V> current = table[index];
+        Node<K, V> prev = null;
+        while (current != null) {
+            if (current.key.equals(key)) {
+                prev.next = current.next;
                 size--;
                 return;
             }
-            prevNode = currentNode;
-            currentNode = currentNode.next;
+            prev = current;
+            current = current.next;
         }
     }
 
     public void clear() {
-        for (int i = 0; i < table.length; i++) {
-            table[i] = null;
-        }
+        table = new Node[INITIAL_CAPACITY];
         size = 0;
     }
 
@@ -86,18 +78,23 @@ public class MyHashMap {
         return size;
     }
 
-    public Object get(Object key) {
+    public V get(K key) {
         int index = hash(key);
 
-        Node currentNode = table[index];
-        while (currentNode != null) {
-            if (currentNode.key.equals(key)) {
-                return currentNode.value;
+        Node<K, V> current = table[index];
+        while (current != null) {
+            if (current.key.equals(key)) {
+                return current.value;
             }
-            currentNode = currentNode.next;
+            current = current.next;
         }
 
         return null;
     }
+
+    private int hash(K key) {
+        return Math.abs(key.hashCode()) % table.length;
+    }
 }
+
 

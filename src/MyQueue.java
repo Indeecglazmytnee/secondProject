@@ -1,15 +1,15 @@
 import java.util.NoSuchElementException;
 
-public class MyQueue {
-    private Node front;
-    private Node rear;
+public class MyQueue<T> {
+    private Node<T> front;
+    private Node<T> rear;
     private int size;
 
-    private class Node {
-        Object value;
-        Node next;
+    private static class Node<T> {
+        T value;
+        Node<T> next;
 
-        Node(Object value, Node next) {
+        Node(T value, Node<T> next) {
             this.value = value;
             this.next = next;
         }
@@ -21,8 +21,8 @@ public class MyQueue {
         size = 0;
     }
 
-    public void add(Object value) {
-        Node newNode = new Node(value, null);
+    public void add(T value) {
+        Node<T> newNode = new Node<>(value, null);
         if (rear != null) {
             rear.next = newNode;
         }
@@ -43,18 +43,18 @@ public class MyQueue {
         return size;
     }
 
-    public Object peek() {
+    public T peek() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
         return front.value;
     }
 
-    public Object poll() {
+    public T poll() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        Object value = front.value;
+        T value = front.value;
         front = front.next;
         if (front == null) {
             rear = null;
@@ -67,4 +67,3 @@ public class MyQueue {
         return size == 0;
     }
 }
-
