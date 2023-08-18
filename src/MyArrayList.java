@@ -3,17 +3,16 @@ import java.util.NoSuchElementException;
 public class MyArrayList<T> {
     private Object[] array;
     private int size;
+    private static final int INITIAL_CAPACITY = 10;
 
     public MyArrayList() {
-        array = new Object[10];
+        array = new Object[INITIAL_CAPACITY];
         size = 0;
     }
 
     public void add(T value) {
         if (size == array.length) {
-            Object[] newArray = new Object[array.length * 2];
-            System.arraycopy(array, 0, newArray, 0, size);
-            array = newArray;
+            resizeArray(array.length * 2);
         }
         array[size++] = value;
     }
@@ -25,7 +24,7 @@ public class MyArrayList<T> {
     }
 
     public void clear() {
-        array = new Object[10];
+        array = new Object[INITIAL_CAPACITY];
         size = 0;
     }
 
@@ -42,6 +41,12 @@ public class MyArrayList<T> {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
+    }
+
+    private void resizeArray(int newCapacity) {
+        Object[] newArray = new Object[newCapacity];
+        System.arraycopy(array, 0, newArray, 0, size);
+        array = newArray;
     }
 }
 

@@ -35,12 +35,12 @@
         // Примеры использования MyHashMap
         MyHashMap myHashMap = new MyHashMap();
         myHashMap.put("Ключ 232", " очень интересно учить JAVA ");
-        myHashMap.put("Ключ 432 ", " ну впринципе все ");
+        myHashMap.put(" ", " ну впринципе все ");
         System.out.println("MyHashMap size: " + myHashMap.size());
         System.out.println("MyHashMap value for Key 1: " + myHashMap.get("Ключ 232"));
 
 
-    }
+     }
 }*/
 import java.util.NoSuchElementException;
 
@@ -95,11 +95,11 @@ public class Main {
 
     private static void testMyHashMap() {
         MyHashMap<String, String> myHashMap = new MyHashMap<>();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100000; i++) {
             myHashMap.put("Key " + i, "Value " + i);
         }
         System.out.println("MyHashMap size: " + myHashMap.size());
         System.out.println("MyHashMap value for Key 0: " + myHashMap.get("Key 0"));
-        System.out.println("MyHashMap value for Key 999: " + myHashMap.get("Key 999"));
+        System.out.println("MyHashMap value for Key 99999: " + myHashMap.get("Key 99999"));
     }
 }
